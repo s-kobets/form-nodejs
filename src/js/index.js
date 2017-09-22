@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const {isValid} = validate
 
         setData(validate)
-        if (!isValid) {
+        if (isValid) {
             const xhr = new XMLHttpRequest()
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {

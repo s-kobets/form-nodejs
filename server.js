@@ -17,8 +17,22 @@ function sendFile(file, res) {
 function showError(error) {
   console.log(error);
 
-  response.writeHead(500);
-  response.end('Internal Server Error');
+  res.writeHead(500);
+  res.end('Internal Server Error');
+}
+
+function requestPost(req, res) {
+  let data = '';
+  req.on('data', (chunk) => {
+      data += chunk.toString();
+  });
+  req.on('end', () => {
+    if (data.length === 0) {
+      res.writeHead(400)
+      res.end('Empty data');
+    }
+    res.end();
+  });
 }
 
 app.on('request', (req, res) => {
@@ -27,13 +41,26 @@ app.on('request', (req, res) => {
   if (req.url === '/') {
     sendFile('index.html', res)
     return true
+
   } else if (req.url === '/register') {
-    if (!req.body) {
-      res.writeHead(400);
-      res.end('Empty body');
-    }
+    requestPost(req, res)
+
     res.writeHead(200, {'Content-Type': 'application/json'})
     res.end(JSON.stringify({'status': 'success'}))
+
+  } else if (req.url === '/error') {
+    res.writeHead(200, {'Content-Type': 'application/json'})
+    res.end(JSON.stringify({
+      status: 'error',
+      reason: 'Server error'
+    }))
+
+  } else if (req.url === '/timeout') {
+    res.writeHead(200, {'Content-Type': 'application/json'})
+    res.end(JSON.stringify({
+      status: 'progress',
+      timeout: 1000
+    }))
   }
 
   fs.exists(file, function (exists) {
@@ -65,23 +92,6 @@ app.on('request', (req, res) => {
     }
   });
 })
-// app.get('*', function(req, res) {
-//     res.render('index.html')
-// });
-
-// app.post('/register', urlencodedParser, (req, res) => {
-//     if (!req.body) return res.sendStatus(400)
-//     res.writeHead(200, {'Content-Type': 'application/json'});
-//     res.end(JSON.stringify({'status': 'success'}));
-// })
-
-// app.post('/error', urlencodedParser, (req, res) => {
-//     if (!req.body) return res.sendStatus(400)
-//     res.end(JSON.stringify({
-//         'status': 'error',
-//         'reason': 'Server error'
-//     }));
-// })
 
 // app.post('/timeout', urlencodedParser, (req, res) => {
 //     if (!req.body) return res.sendStatus(400)
