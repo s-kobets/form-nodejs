@@ -2,10 +2,7 @@ import http from 'http'
 import path from 'path'
 import fs from 'fs'
 
-import bodyParser from 'body-parser'
-
 const app = new http.Server();
-const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 function sendFile(file, res) {
   fs.readFile(file, (err, content) => {
@@ -92,14 +89,6 @@ app.on('request', (req, res) => {
     }
   });
 })
-
-// app.post('/timeout', urlencodedParser, (req, res) => {
-//     if (!req.body) return res.sendStatus(400)
-//     res.end(JSON.stringify({
-//         'status': 'progress',
-//         'timeout': 1000
-//     }));
-// })
 
 app.listen(3000, function() {
   console.log('Example app listening on port 3000!')
