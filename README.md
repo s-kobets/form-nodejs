@@ -11,3 +11,11 @@ npm run start
 ```javascript
 npm run build_js
 ```
+
+### Docker
+
+```bash
+docker build -t yandex-nodejs .
+
+docker run -p 3000:3000 -ti yandex-nodejs
+```
