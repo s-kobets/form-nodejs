@@ -1,5 +1,7 @@
 Форма с валидацией на Node.js
 
+DEMO[https://s-kobets.github.io/form-nodejs/]
+
 #### Usage
 
 ```javascript
